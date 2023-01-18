@@ -4,50 +4,97 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
-public class GUI implements ActionListener {
+public class GUI {
 	
-	private JFrame frame;
-	private JButton button;
-	private JLabel begin;
-	private JPanel panel;
+	private static JFrame frame;
+	private static JButton startButton;
+	private static JLabel beginLabel;
+	private static JPanel homePanel;
 	
-	public GUI() {
+	private static JButton questButton;
+	private static JLabel questLabel;
+	private static JPanel questPanel;
+	private static JList quests;
+	private static DefaultListModel listModel;
+	
+	public static void main(String[] args) {
 		
+		/* Set up of buttonListeners */
+		ActionListener buttonListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object o = e.getSource();
+				
+				if (o == startButton) {
+					homePanel.setVisible(false);
+					frame.add(questPanel, BorderLayout.CENTER);
+				} else if (o == questButton) {
+					addQuest();
+					frame.add(questPanel, BorderLayout.CENTER);
+				}
+			}
+			
+		};
+		
+		
+		
+		/* GUI for home page */	
+		beginLabel = new JLabel("Click start to begin your adventure!");
+		
+		startButton = new JButton("Start");
+		startButton.addActionListener(buttonListener);	
+		
+		homePanel = new JPanel();
+		homePanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+		homePanel.setLayout(new GridLayout(0, 1));
+		homePanel.add(beginLabel);
+		homePanel.add(startButton);
+		
+		/* GUI for quest page */
+		questLabel = new JLabel("My Quests");
+		
+		questButton = new JButton("Add New Quest");
+		questButton.addActionListener(buttonListener);
+		
+		listModel = new DefaultListModel();
+		listModel.addElement("item 1");
+		quests = new JList(listModel);
+		
+		questPanel = new JPanel();
+		questPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+		questPanel.setLayout(new GridLayout(0,1));
+		questPanel.add(questLabel);
+		questPanel.add(quests);
+		questPanel.add(questButton);
+		
+		/* GUI for add quest page */
+		/* Add GUI code for the pop up for adding details of the quest */
+		/* should be new frame */
+			
 		frame = new JFrame();
 		
-		button = new JButton("Start");
-		button.addActionListener(this);
-		
-		begin = new JLabel("Click start to begin your adventure!");
-		
-		panel = new JPanel();
-		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-		panel.setLayout(new GridLayout(0, 1));
-		panel.add(begin);
-		panel.add(button);
-		
-		frame.add(panel, BorderLayout.CENTER);
-		frame.setSize(2000, 1000);
+		frame.add(homePanel, BorderLayout.CENTER);
+		frame.setSize(4000, 3000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Procrastination Checklist");
 		frame.pack();
 		frame.setVisible(true);
+	}
+	
+	public static void addQuest() {
+		listModel.addElement("new item"); // connect to the quest implementation code
+	}
+	
+	public static void completedQuest() {
 		
-	}
-
-	public static void main(String[] args) {
-		new GUI();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		button.setVisible(false);
-		begin.setVisible(false);
 	}
 
 }
